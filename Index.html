@@ -1,1 +1,736 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
 
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#1877f2"
+    >
+
+    <title>Facebook Invite Manager</title>
+
+    <link
+        rel="stylesheet"
+        href="/style.css"
+    >
+</head>
+
+<body>
+
+<header class="topbar">
+
+    <div class="brand">
+        <div class="fb-logo">f</div>
+
+        <div>
+            <h1>Facebook Invite</h1>
+            <p>Invite Manager</p>
+        </div>
+    </div>
+
+    <button
+        class="connect-btn"
+        onclick="connectFacebook()"
+    >
+        🔵 Connect Facebook
+    </button>
+
+</header>
+
+
+<div class="layout">
+
+    <aside class="sidebar">
+
+        <button
+            class="menu active"
+            onclick="showPage('dashboard')"
+        >
+            🏠 Dashboard
+        </button>
+
+        <button
+            class="menu"
+            onclick="showPage('target')"
+        >
+            👥 Target Users
+        </button>
+
+        <button
+            class="menu"
+            onclick="showPage('campaign')"
+        >
+            🚀 Campaigns
+        </button>
+
+        <button
+            class="menu"
+            onclick="showPage('logs')"
+        >
+            📋 Logs
+        </button>
+
+        <div class="side-note">
+            <b>🔒 Privacy</b>
+            <p>
+                ប្រើតែបញ្ជីអ្នកដែលអ្នកមានសិទ្ធិ
+                និងបានយល់ព្រមសម្រាប់ការទាក់ទង។
+            </p>
+        </div>
+
+    </aside>
+
+
+    <main class="content">
+
+
+        <!-- DASHBOARD -->
+
+        <section id="dashboard" class="page">
+
+            <div class="hero">
+
+                <div>
+                    <h2>សួស្តី 👋</h2>
+
+                    <p>
+                        គ្រប់គ្រងការអញ្ជើញរបស់អ្នក
+                        ពី Dashboard មួយ។
+                    </p>
+                </div>
+
+                <div class="hero-icon">
+                    👥
+                </div>
+
+            </div>
+
+
+            <div class="stats">
+
+                <div class="stat">
+                    <span>👥</span>
+                    <small>Total</small>
+                    <strong id="total">0</strong>
+                </div>
+
+                <div class="stat">
+                    <span>✅</span>
+                    <small>Invited</small>
+                    <strong id="invited">0</strong>
+                </div>
+
+                <div class="stat">
+                    <span>⏳</span>
+                    <small>Pending</small>
+                    <strong id="pending">0</strong>
+                </div>
+
+                <div class="stat">
+                    <span>❌</span>
+                    <small>Failed</small>
+                    <strong id="failed">0</strong>
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>🚀 Start New Campaign</h3>
+
+                <p class="muted">
+                    ជ្រើស Target និងចំនួនអ្នកដែលអ្នកមានសិទ្ធិអញ្ជើញ។
+                </p>
+
+                <button
+                    class="primary large"
+                    onclick="showPage('campaign')"
+                >
+                    ចាប់ផ្តើម Campaign
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- TARGET -->
+
+        <section id="target" class="page hidden">
+
+            <div class="page-title">
+                <h2>👥 Target Users</h2>
+
+                <p>
+                    Upload CSV ដែលមានអ្នកប្រើដែលអ្នកមានសិទ្ធិទាក់ទង។
+                </p>
+            </div>
+
+
+            <div class="card">
+
+                <h3>Upload User List</h3>
+
+                <div class="upload-box">
+
+                    <input
+                        type="file"
+                        id="csvFile"
+                        accept=".csv"
+                    >
+
+                    <button
+                        class="primary"
+                        onclick="uploadCSV()"
+                    >
+                        📤 Upload CSV
+                    </button>
+
+                </div>
+
+                <p id="uploadResult"></p>
+
+                <div class="example">
+                    CSV columns:
+                    <code>name,facebook_id</code>
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Users</h3>
+
+                <div id="usersList">
+                    មិនទាន់មាន User List
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- CAMPAIGN -->
+
+        <section id="campaign" class="page hidden">
+
+            <div class="page-title">
+
+                <h2>🚀 New Campaign</h2>
+
+                <p>
+                    រៀបចំ Campaign របស់អ្នក។
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <label>
+                    Target
+                </label>
+
+                <select id="targetType">
+
+                    <option value="group">
+                        Facebook Group
+                    </option>
+
+                    <option value="page">
+                        Facebook Page
+                    </option>
+
+                </select>
+
+
+                <label>
+                    Target Name
+                </label>
+
+                <input
+                    id="targetName"
+                    placeholder="ឧ. My English Group"
+                >
+
+
+                <label>
+                    Maximum Users
+                </label>
+
+                <input
+                    id="limit"
+                    type="number"
+                    min="1"
+                    max="500"
+                    value="50"
+                >
+
+
+                <label>
+                    Message (optional)
+                </label>
+
+                <textarea
+                    id="message"
+                    placeholder="សរសេរសាររបស់អ្នក..."
+                ></textarea>
+
+
+                <button
+                    class="primary large"
+                    onclick="startCampaign()"
+                >
+                    🚀 Start Campaign
+                </button>
+
+
+                <p
+                    id="campaignResult"
+                    class="result"
+                ></p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Campaign History</h3>
+
+                <div id="campaignList">
+                    Loading...
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- LOGS -->
+
+        <section id="logs" class="page hidden">
+
+            <div class="page-title">
+
+                <h2>📋 Activity Logs</h2>
+
+                <p>
+                    ប្រវត្តិសកម្មភាព Campaign។
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div
+                    id="logsList"
+                    class="logs"
+                >
+                    Loading...
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+<script>
+
+function showPage(pageName) {
+
+    document
+        .querySelectorAll(".page")
+        .forEach(page => {
+            page.classList.add("hidden");
+        });
+
+    document
+        .getElementById(pageName)
+        .classList.remove("hidden");
+
+    if (pageName === "dashboard") {
+        loadStats();
+    }
+
+    if (pageName === "target") {
+        loadUsers();
+    }
+
+    if (pageName === "campaign") {
+        loadCampaigns();
+    }
+
+    if (pageName === "logs") {
+        loadLogs();
+    }
+}
+
+
+function connectFacebook() {
+
+    alert(
+        "Facebook OAuth នឹងភ្ជាប់នៅ Version 2។ " +
+        "Version 1 មិនរក្សាទុក Facebook password ទេ។"
+    );
+}
+
+
+async function loadStats() {
+
+    const response =
+        await fetch("/api/stats");
+
+    const data =
+        await response.json();
+
+    document.getElementById("total")
+        .textContent = data.total;
+
+    document.getElementById("invited")
+        .textContent = data.invited;
+
+    document.getElementById("pending")
+        .textContent = data.pending;
+
+    document.getElementById("failed")
+        .textContent = data.failed;
+}
+
+
+async function uploadCSV() {
+
+    const input =
+        document.getElementById("csvFile");
+
+    if (!input.files.length) {
+
+        alert("សូមជ្រើស CSV file ជាមុនសិន");
+
+        return;
+    }
+
+    const formData =
+        new FormData();
+
+    formData.append(
+        "file",
+        input.files[0]
+    );
+
+    const response =
+        await fetch(
+            "/api/users/upload",
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+    const data =
+        await response.json();
+
+    const result =
+        document.getElementById(
+            "uploadResult"
+        );
+
+    if (response.ok) {
+
+        result.textContent =
+            `✅ Imported ${data.count} users`;
+
+        result.className =
+            "success";
+
+        loadUsers();
+
+    } else {
+
+        result.textContent =
+            "❌ " +
+            (data.detail || "Upload failed");
+
+        result.className =
+            "error";
+    }
+}
+
+
+async function loadUsers() {
+
+    const response =
+        await fetch("/api/users");
+
+    const data =
+        await response.json();
+
+    const container =
+        document.getElementById(
+            "usersList"
+        );
+
+    if (!data.users.length) {
+
+        container.innerHTML =
+            "<p class='muted'>No users</p>";
+
+        return;
+    }
+
+    container.innerHTML =
+        data.users
+        .map(
+            user => `
+                <div class="user-row">
+                    <div>
+                        <b>${escapeHtml(user.name)}</b>
+                        <small>
+                            ${escapeHtml(
+                                user.facebook_id
+                            )}
+                        </small>
+                    </div>
+
+                    <span class="badge">
+                        Approved List
+                    </span>
+                </div>
+            `
+        )
+        .join("");
+}
+
+
+async function startCampaign() {
+
+    const targetType =
+        document.getElementById(
+            "targetType"
+        ).value;
+
+    const targetName =
+        document.getElementById(
+            "targetName"
+        ).value.trim();
+
+    const limit =
+        Number(
+            document.getElementById(
+                "limit"
+            ).value
+        );
+
+    const message =
+        document.getElementById(
+            "message"
+        ).value;
+
+    if (!targetName) {
+
+        alert(
+            "សូមបញ្ចូល Target Name"
+        );
+
+        return;
+    }
+
+    const response =
+        await fetch(
+            "/api/campaign/start",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    target:
+                        targetType +
+                        ": " +
+                        targetName,
+
+                    limit: limit,
+
+                    message: message
+                })
+            }
+        );
+
+    const data =
+        await response.json();
+
+    const result =
+        document.getElementById(
+            "campaignResult"
+        );
+
+    if (response.ok) {
+
+        result.textContent =
+            `✅ Campaign started: ${data.total} users`;
+
+        result.className =
+            "success";
+
+        loadCampaigns();
+
+        setTimeout(
+            loadStats,
+            500
+        );
+
+    } else {
+
+        result.textContent =
+            "❌ " +
+            (data.detail ||
+             "Campaign failed");
+
+        result.className =
+            "error";
+    }
+}
+
+
+async function loadCampaigns() {
+
+    const response =
+        await fetch(
+            "/api/campaigns"
+        );
+
+    const data =
+        await response.json();
+
+    const container =
+        document.getElementById(
+            "campaignList"
+        );
+
+    if (!data.campaigns.length) {
+
+        container.innerHTML =
+            "<p class='muted'>No campaigns yet.</p>";
+
+        return;
+    }
+
+    container.innerHTML =
+        data.campaigns
+        .map(
+            campaign => `
+                <div class="campaign-row">
+
+                    <div>
+                        <b>
+                            ${escapeHtml(
+                                campaign.target
+                            )}
+                        </b>
+
+                        <small>
+                            ${campaign.total} users
+                        </small>
+                    </div>
+
+                    <span class="status">
+                        ${campaign.status}
+                    </span>
+
+                </div>
+            `
+        )
+        .join("");
+}
+
+
+async function loadLogs() {
+
+    const response =
+        await fetch(
+            "/api/logs"
+        );
+
+    const data =
+        await response.json();
+
+    const container =
+        document.getElementById(
+            "logsList"
+        );
+
+    if (!data.logs.length) {
+
+        container.innerHTML =
+            "<p class='muted'>No activity yet.</p>";
+
+        return;
+    }
+
+    container.innerHTML =
+        data.logs
+        .map(
+            log => `
+                <div class="log-row">
+
+                    <div>
+                        <b>
+                            ${escapeHtml(
+                                log.name
+                            )}
+                        </b>
+
+                        <small>
+                            ${escapeHtml(
+                                log.time
+                            )}
+                        </small>
+                    </div>
+
+                    <span class="status">
+                        ${log.status}
+                    </span>
+
+                </div>
+            `
+        )
+        .join("");
+}
+
+
+function escapeHtml(value) {
+
+    return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+loadStats();
+
+</script>
+
+</body>
+</html>
